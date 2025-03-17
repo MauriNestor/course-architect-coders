@@ -1,5 +1,6 @@
 package org.architect_course.ui.main
 
+import android.Manifest
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import org.architect_course.R
 import org.architect_course.databinding.FragmentMainBinding
 import org.architect_course.model.Movie
 import org.architect_course.model.MoviesRepository
+import org.architect_course.ui.common.PermissionRequester
 import org.architect_course.ui.common.launchAndCollect
 import org.architect_course.ui.common.visible
 
@@ -21,10 +23,14 @@ import org.architect_course.ui.common.visible
 class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val viewModel: MainViewModel by viewModels {
-        MainViewModelFactory(MoviesRepository(requireActivity() as AppCompatActivity))
+        MainViewModelFactory(MoviesRepository(requireActivity().application))
     }
 
     private val adapter = MoviesAdapter { viewModel.onMovieClicked(it) }
+    private val coarsePermissionRequester = PermissionRequester(
+        this,
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    )
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,11 +44,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun FragmentMainBinding.updateUI(state: MainViewModel.UiState) {
         progress.visible = state.loading
+        state.movies?.let(adapter::submitList)
+        state.navigateTo?.let(::navigateTo)
+        if (state.requestLocationPermission) {
+            requestLocationPermission()
+        }
     }
 
     private fun navigateTo(movie: Movie) {
         val action = MainFragmentDirections.actionMainToDetail(movie)
         findNavController().navigate(action)
         viewModel.onNavigateDone()
+    }
+    private fun requestLocationPermission() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            coarsePermissionRequester.request()
+            viewModel.onLocationPermissionChecked()
+        }
     }
 }

@@ -1,12 +1,11 @@
 package org.architect_course.model
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Application
 import org.architect_course.R
 
-class MoviesRepository(activity: AppCompatActivity) {
-
-    private val apiKey = activity.getString(R.string.api_key)
-    private val regionRepository = RegionRepository(activity)
+class MoviesRepository(application: Application) {
+    private val apiKey = application.getString(R.string.api_key)
+    private val regionRepository = RegionRepository(application)
 
     suspend fun findPopularMovies() =
         RemoteConnection.service
