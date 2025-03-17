@@ -33,12 +33,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
         viewLifecycleOwner.launchAndCollect(viewModel.state) { binding.updateUI(it) }
-
-        viewLifecycleOwner.launchAndCollect(viewModel.events) {
-            when (it) {
-                is MainViewModel.UiEvent.NavigateTo -> navigateTo(it.movie)
-            }
-        }
     }
 
 
@@ -49,5 +43,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun navigateTo(movie: Movie) {
         val action = MainFragmentDirections.actionMainToDetail(movie)
         findNavController().navigate(action)
+        viewModel.onNavigateDone()
     }
 }
