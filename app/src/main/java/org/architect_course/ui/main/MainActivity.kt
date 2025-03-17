@@ -4,6 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import org.architect_course.databinding.ActivityMainBinding
 import org.architect_course.model.Movie
 import org.architect_course.model.MoviesRepository
@@ -25,7 +29,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         binding.recycler.adapter = adapter
 
-        viewModel.state.observe(this, ::updateUI)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.state.collect { updateUI(it) }
+            }
+        }
     }
 
     private fun updateUI(state: MainViewModel.UiState) {

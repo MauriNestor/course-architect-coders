@@ -3,6 +3,10 @@ package org.architect_course.ui.detail
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 import org.architect_course.ui.common.getParcelableExtraCompat
 import org.architect_course.databinding.ActivityDetailBinding
 import org.architect_course.model.Movie
@@ -26,7 +30,11 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.state.observe(this) { updateUI(it.movie) }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.state.collect { updateUI(it.movie) }
+            }
+        }
     }
 
     private fun updateUI(movie: Movie) = with(binding) {

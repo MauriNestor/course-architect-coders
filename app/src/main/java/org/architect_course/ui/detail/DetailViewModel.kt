@@ -1,9 +1,10 @@
 package org.architect_course.ui.detail
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.architect_course.model.Movie
 
 
@@ -11,8 +12,8 @@ class DetailViewModel(movie: Movie) : ViewModel() {
 
     class UiState(val movie: Movie)
 
-    private val _state = MutableLiveData(UiState(movie))
-    val state: LiveData<UiState> get() = _state
+    private val _state = MutableStateFlow(UiState(movie))
+    val state: StateFlow<UiState>  = _state.asStateFlow()
 }
 
 
