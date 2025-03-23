@@ -1,19 +1,17 @@
 package org.architect_course.model
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
 
 
 data class RemoteResult(
     val page: Int,
-    val results: List<Movie>,
+    val results: List<RemoteMovie>,
     @SerializedName("total_pages") val totalPages: Int,
     @SerializedName("total_results") val totalResults: Int
 )
 
-@Parcelize
-data class Movie(
+
+data class RemoteMovie(
     val adult: Boolean,
     @SerializedName("backdrop_path") val backdropPath: String?,
     @SerializedName("genre_ids") val genreIds: List<Int>,
@@ -28,4 +26,4 @@ data class Movie(
     val video: Boolean,
     @SerializedName("vote_average") val voteAverage: Double,
     @SerializedName("vote_count") val voteCount: Int
-) : Parcelable
+)
