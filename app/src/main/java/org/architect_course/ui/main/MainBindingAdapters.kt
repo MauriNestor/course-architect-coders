@@ -2,7 +2,7 @@ package org.architect_course.ui.main
 
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.architect_course.model.Movie
+import org.architect_course.model.database.Movie
 
 
 @BindingAdapter("items")

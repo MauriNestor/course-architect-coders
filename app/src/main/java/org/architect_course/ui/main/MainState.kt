@@ -7,7 +7,8 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.architect_course.model.Movie
+import org.architect_course.model.database.Movie
+
 import org.architect_course.ui.common.PermissionRequester
 
 fun Fragment.buildMainState(
