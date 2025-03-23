@@ -1,7 +1,7 @@
 package org.architect_course.ui.detail
 
 import androidx.databinding.BindingAdapter
-import org.architect_course.model.Movie
+import org.architect_course.model.database.Movie
 
 
 @BindingAdapter("movie")

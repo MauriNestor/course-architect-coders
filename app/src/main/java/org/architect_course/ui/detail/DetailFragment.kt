@@ -4,21 +4,20 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
-import kotlinx.coroutines.launch
 import org.architect_course.R
 import org.architect_course.databinding.FragmentDetailBinding
-import org.architect_course.ui.common.loadUrl
+import org.architect_course.model.MoviesRepository
+import org.architect_course.ui.common.app
+import org.architect_course.ui.common.launchAndCollect
 
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val viewModel: DetailViewModel by viewModels {
-        DetailViewModelFactory(requireNotNull(safeArgs.movie))    }
+        DetailViewModelFactory(safeArgs.movieId, MoviesRepository(requireActivity().app))
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,9 +27,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { binding.movie = it.movie }            }
+        viewLifecycleOwner.launchAndCollect(viewModel.state) { state ->
+            if (state.movie != null) {
+                binding.movie = state.movie
+            }
         }
     }
 

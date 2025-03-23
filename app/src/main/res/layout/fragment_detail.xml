@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="org.architect_course.model.Movie" />
+        <import type="org.architect_course.model.database.Movie" />
 
         <variable
             name="movie"

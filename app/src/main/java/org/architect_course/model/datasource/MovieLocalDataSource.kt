@@ -13,4 +13,5 @@ class MovieLocalDataSource(private val movieDao: MovieDao) {
     fun save(movies: List<Movie>) {
         movieDao.insertMovies(movies)
     }
+    fun findById(id: Int): Flow<Movie> = movieDao.findById(id)
 }
