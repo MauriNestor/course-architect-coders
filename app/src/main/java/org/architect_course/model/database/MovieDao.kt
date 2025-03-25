@@ -17,10 +17,10 @@ interface MovieDao {
     fun findById(id: Int): Flow<Movie>
 
     @Query("SELECT COUNT(id) FROM Movie")
-    fun movieCount(): Int
+    suspend fun movieCount(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertMovies(movies: List<Movie>)
+    suspend fun insertMovies(movies: List<Movie>)
 
     @Update
     fun updateMovie(movie: Movie)

@@ -2,6 +2,7 @@ package org.architect_course.model
 
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import org.architect_course.App
 import org.architect_course.R
@@ -17,15 +18,16 @@ class MoviesRepository(application: App) {
     )
     val popularMovies = localDataSource.movies
 
-    fun findById(id: Int) = localDataSource.findById(id)
+    fun findById(id: Int): Flow<Movie> = localDataSource.findById(id)
 
-    suspend fun requestPopularMovies() = withContext(Dispatchers.IO) {
+    suspend fun requestPopularMovies() {
         if (localDataSource.isEmpty()) {
             val movies = remoteDataSource.findPopularMovies()
             localDataSource.save(movies.results.toLocalModel())
         }
     }
 }
+
 private fun List<RemoteMovie>.toLocalModel(): List<Movie> = map { it.toLocalModel() }
 
 private fun RemoteMovie.toLocalModel(): Movie = Movie(
