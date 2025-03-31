@@ -22,6 +22,10 @@ class MoviesRepository(application: App) {
             localDataSource.save(movies.results.toLocalModel())
         }
     }
+    suspend fun switchFavorite(movie: Movie) {
+        val updatedMovie = movie.copy(favorite = !movie.favorite)
+        localDataSource.save(listOf(updatedMovie))
+    }
 }
 
 private fun List<RemoteMovie>.toLocalModel(): List<Movie> = map { it.toLocalModel() }
@@ -36,5 +40,6 @@ private fun RemoteMovie.toLocalModel(): Movie = Movie(
     originalLanguage,
     originalTitle,
     popularity,
-    voteAverage
+    voteAverage,
+    false
 )
